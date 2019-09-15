@@ -7,7 +7,6 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -15,49 +14,77 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <script defer src='diagramm.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script defer src="./index.js"></script>
+    <script defer src="index.js"></script>
+
+    <link href="./index.css" rel="stylesheet" />
+
     <title>VTB</title>
   </head>
   <body>
-    <div id="app" class="justify-container">
-      <nav class="navbar sticky-top navbar-dark bg-primary">
-        <a class="navbar-brand" href="#!">ВТБ Голосование</a>
+    <div id="app" class="container-fluid">
+      <nav
+        class="navbar sticky-top navbar-dark row"
+        style="background-color: #0a2896;"
+      >
+        <a class="navbar-brand" href="#!">ВТБ. Голосование</a>
       </nav>
+      <div class="p-4">
+        <h3><strong>ВТБ. Протокол собрания</strong></h3>
+        <div><strong>Дата:</strong> {{ date }}</div>
+        <div><strong>Тема дня: </strong> {{ topic }}</div>
 
-      <h3 class="font-weight-bold">ВТБ. Протокол собрания</h3>
-      <div>Дата: {{ date }}</div>
-      <div>Тема дня: {{ topic }}</div>
-
-      <div>
-        Совокупность долей участников, присутствующих на общем собрании:
-        {{ percent }}
-      </div>
-      <div>
-        Список участников:
         <div>
-          <ol>
-            <li v-for="todo in todos">
-              {{ todo.name }}
-            </li>
-          </ol>
+          <strong
+            >Совокупность долей участников, присутствующих на общем
+            собрании:</strong
+          >
+          <p>{{ percent }}</p>
+        </div>
+        <div>
+          <strong>Список участников:</strong>
+          <div>
+            <ol>
+              <li v-for="todo in todos">
+                {{ todo.name }}
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div>
+          <strong>Комментарии по теме:</strong>
+          <div>
+            <ol>
+              <li v-for="todo in comment">
+                {{ todo.text }}
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class='form'>
+          <strong>Результаты голосования:</strong>
+          <div>
+            <ol>
+              <li>За - {{ vote[0].yes }}%</li>
+              <li>Против - {{ vote[1].no }}%</li>
+              <li>Воздержался - {{ vote[2].quite }}%</li>
+            </ol>
+          </div>
+          <div class="container"></div>
+        </div>
+        <div><strong>Решили:</strong> {{ decision }}</div>
+        <div>
+          <strong>Подпись:</strong>
+          <span class="text-secondary">{{ signature }}</span>
         </div>
       </div>
-      <div>Комментарии по теме: {{ comment }}</div>
-
-      <div>
-        Результаты голосования:
-        <div>
-          <ol>
-            <li v-for="todo in vote">
-              {{ todo.text }}
-            </li>
-          </ol>
-        </div>
-      </div>
-      <div>Решили: {{ decision }}</div>
-      <div>Подпись: {{ signature }}</div>
-      
     </div>
 
     <script
