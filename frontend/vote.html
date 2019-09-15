@@ -35,11 +35,9 @@
       <!-- STATISTICS -->
       <div class="row my-4">
         <div class="col-4 text-center">
-            <h3>Автор: {{author.username}}</h3>
+          <h3>Пользователь: {{ myUser.username }}</h3>
         </div>
-        <div class="col-4 text-center">
-          Осталось времени<br />13 мин. 52 сек.
-        </div>
+        <div class="col-4 text-center">Осталось времени<br />13 мин.</div>
         <div class="col-4">
           <div>Отвечено: 7 из 15</div>
           <div class="progress">
@@ -119,16 +117,20 @@
               aria-labelledby="quiz-tab"
             >
               <!-- QUIZ 🔥 -->
-              <div id="accordion" role="tablist" style="max-height: 60vh; overflow:auto;">
+              <div
+                id="accordion"
+                role="tablist"
+                style="max-height: 60vh; overflow:auto;"
+              >
                 <div
                   class="card mx-2 shadow-sm m-3"
                   v-for="(quiz, index) in quizzes"
                   @mouseover="selectedQuiz=quiz.id"
-                   onmouseover="if (document.getElementById('answer-tab').getAttribute('aria-selected') !== 'true') document.getElementById('answer-tab').click()"
+                  onmouseover="if (document.getElementById('answer-tab').getAttribute('aria-selected') !== 'true') document.getElementById('answer-tab').click()"
                 >
                   <div
                     class="card-header"
-                    :class="index==1?'bg-success':''"
+                    :class="myVotes[index] === 'yes' ? 'bg-success ' : (myVotes[index] === 'no' ? 'bg-danger' : (myVotes[index] === 'quite' ? 'bg-warning' : ''))"
                     role="tab"
                     :id="'quiz-heading-'+index"
                   >
@@ -152,17 +154,32 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-4">
-                          <button class="btn btn-outline-success btn-block">
+                          <button
+                            class="btn btn-block"
+                            :disabled="!(myVotes[index] == 'new' || myVotes[index] == 'empty')"
+                            :class="myVotes[index] === 'yes' ? 'btn-success ' : 'btn-outline-success'"
+                            @click="makeVote(quiz.id,myUser.id, 'yes')"
+                          >
                             ЗА
                           </button>
                         </div>
                         <div class="col-4">
-                          <button class="btn btn-outline-danger btn-block">
+                          <button
+                            class="btn btn-block"
+                            :disabled="!(myVotes[index] == 'new' || myVotes[index] == 'empty')"
+                            :class="(myVotes[index] === 'no') ? 'btn-danger ' : 'btn-outline-danger'"
+                            @click="makeVote(quiz.id, myUser.id, 'no')"
+                          >
                             ПРОТИВ
                           </button>
                         </div>
                         <div class="col-4">
-                          <button class="btn btn-outline-warning btn-block">
+                          <button
+                            class="btn btn-block"
+                            :disabled="!(myVotes[index] == 'new' || myVotes[index] == 'empty')"
+                            :class="myVotes[index] === 'quite' ? 'btn-warning ' : 'btn-outline-warning'"
+                            @click="makeVote(quiz.id,myUser.id, 'quite')"
+                          >
                             ВОЗДЕРЖАЛСЯ
                           </button>
                         </div>
@@ -245,17 +262,31 @@
             >
               <ul class="list-unstyled">
                 <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
-                <li v-for="answer in allAnswers" class="media p-3 shadow my-3" @mouseover="selectedQuiz = answer.answer.quizId" onclick="document.getElementById('answer-tab').click()" >
-                    <img src="icons/avatar.png" class="rounded-circle shadow-sm mr-3" style="max-width: 50%" alt="avatar-1" />
-                    <div class="media-body" :title="answer.quiz.text">
-                        <h5 class=" mt-0 mb-1 d-inline-block text-truncate" style="max-width: 35vw;">
-                            {{answer.user.username}}. №{{ answer.answer.quizId }} {{ answer.quiz.text }}
-                            нельзя представить.
-                        </h5>
-                        <p>
-                           {{answer.answer.text}}
-                        </p>
-                    </div>
+                <li
+                  v-for="answer in allAnswers"
+                  class="media p-3 shadow my-3"
+                  @mouseover="selectedQuiz = answer.answer.quizId"
+                  onclick="document.getElementById('answer-tab').click()"
+                >
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    style="max-width: 50%"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body" :title="answer.quiz.text">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      {{ answer.user.username }}. №{{ answer.answer.quizId }}
+                      {{ answer.quiz.text }}
+                      нельзя представить.
+                    </h5>
+                    <p>
+                      {{ answer.answer.text }}
+                    </p>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -268,19 +299,34 @@
               <ul class="list-unstyled">
                 <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
                 <div v-if="activeAnswers.length === 0">
-                    <p class="p-3 shadow">Ещё никто не комментировал данный вопрос. Оставьте первый комментарий</p>
+                  <p class="p-3 shadow">
+                    Ещё никто не комментировал данный вопрос. Оставьте первый
+                    комментарий
+                  </p>
                 </div>
-                <li v-for="answer in activeAnswers" class="media p-3 shadow my-3">
-                    <img src="icons/avatar.png" class="rounded-circle shadow-sm mr-3" style="max-width: 50%" alt="avatar-1" />
-                    <div class="media-body" :title="answer.quiz.text">
-                        <h5 class=" mt-0 mb-1 d-inline-block text-truncate" style="max-width: 35vw;">
-                            {{answer.user.username}}. №{{ answer.answer.quizId }} {{ answer.quiz.text }}
-                            нельзя представить.
-                        </h5>
-                        <p>
-                            {{answer.answer.text}}
-                        </p>
-                    </div>
+                <li
+                  v-for="answer in activeAnswers"
+                  class="media p-3 shadow my-3"
+                >
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    style="max-width: 50%"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body" :title="answer.quiz.text">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      {{ answer.user.username }}. №{{ answer.answer.quizId }}
+                      {{ answer.quiz.text }}
+                      нельзя представить.
+                    </h5>
+                    <p>
+                      {{ answer.answer.text }}
+                    </p>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -290,7 +336,7 @@
               role="tabpanel"
               aria-labelledby="members-tab"
             >
-              <ul class="list-unstyled">
+              <ul v-for="user in allUsers" class="list-unstyled">
                 <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
                 <li class="media p-3 shadow my-3">
                   <img
@@ -304,7 +350,7 @@
                       class=" mt-0 mb-1 d-inline-block text-truncate"
                       style="max-width: 35vw;"
                     >
-                      Иванов М. ivanov@mail.ru
+                      {{ user.username }}
                     </h5>
                     <p>
                       Ответил: 7 из 13 вопросов<br />
