@@ -27,14 +27,16 @@
 
   <body>
     <!-- HEADER -->
-    <div id="app" class="justify-container">
+    <div id="app" class="container-fluid">
       <nav class="navbar row sticky-top navbar-dark bg-primary">
         <a class="navbar-brand ml-5" href="#!">ВТБ. Голосование</a>
       </nav>
 
       <!-- STATISTICS -->
-      <div class="row">
-        <div class="col-4"></div>
+      <div class="row my-4">
+        <div class="col-4 text-center">
+            <h3>Автор: {{author.username}}</h3>
+        </div>
         <div class="col-4 text-center">
           Осталось времени<br />13 мин. 52 сек.
         </div>
@@ -117,10 +119,12 @@
               aria-labelledby="quiz-tab"
             >
               <!-- QUIZ 🔥 -->
-              <div id="accordion" role="tablist">
+              <div id="accordion" role="tablist" style="max-height: 60vh; overflow:auto;">
                 <div
                   class="card mx-2 shadow-sm m-3"
                   v-for="(quiz, index) in quizzes"
+                  @mouseover="selectedQuiz=quiz.id"
+                   onmouseover="if (document.getElementById('answer-tab').getAttribute('aria-selected') !== 'true') document.getElementById('answer-tab').click()"
                 >
                   <div
                     class="card-header"
@@ -134,7 +138,7 @@
                         :href="'#quiz-'+index"
                         aria-expanded="true"
                         :aria-controls="'quiz-'+index"
-                        >#{{ quiz.id }} 🔥 {{ quiz.text }}
+                        >№{{ quiz.id }} 🔥 {{ quiz.text }}
                       </a>
                     </h5>
                   </div>
@@ -189,7 +193,7 @@
                 href="#chat"
                 role="tab"
                 aria-selected="true"
-                >Чат</a
+                >Активность</a
               >
             </li>
             <li class="nav-item">
@@ -216,13 +220,15 @@
             </li>
           </ul>
           <div class="row">
-            <div class="col-12 input-group">
+            <div class="col-12 mt-1 input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text">#1</span>
+                <span class="input-group-text" :title="activeQuiz.text"
+                  >№{{ selectedQuiz }}</span
+                >
               </div>
               <input
                 type="text"
-                placeholder="Введите комментарий на вопроос ..."
+                :placeholder="'Введите комментарий на вопроос №'+selectedQuiz"
                 class="form-control"
               />
               <div class="input-group-append">
@@ -239,44 +245,17 @@
             >
               <ul class="list-unstyled">
                 <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
-                <li class="media p-3 shadow my-3">
-                  <img
-                    src="icons/avatar.png"
-                    class="rounded-circle shadow-sm mr-3"
-                    style="max-width: 50%"
-                    alt="avatar-1"
-                  />
-                  <div class="media-body">
-                    <h5
-                      class=" mt-0 mb-1 d-inline-block text-truncate"
-                      style="max-width: 35vw;"
-                    >
-                      Иванов М. Очень длинный вопрос. Нереально длинный длиннее
-                      нельзя представить.
-                    </h5>
-                    <p>
-                      Это мой комментарий. Я против данного вопроса однозначно.
-                    </p>
-                  </div>
-                </li>
-                <li class="media p-3 shadow my-3">
-                  <img
-                    src="icons/avatar.png"
-                    class="rounded-circle shadow-sm mr-3"
-                    alt="avatar-1"
-                  />
-                  <div class="media-body">
-                    <h5
-                      class=" mt-0 mb-1 d-inline-block text-truncate"
-                      style="max-width: 35vw;"
-                    >
-                      Иванов М. #1 Очень длинный вопрос. Нереально длинный
-                      длиннее нельзя представить.
-                    </h5>
-                    <p>
-                      Это мой комментарий. Я против данного вопроса однозначно.
-                    </p>
-                  </div>
+                <li v-for="answer in allAnswers" class="media p-3 shadow my-3" @mouseover="selectedQuiz = answer.answer.quizId" onclick="document.getElementById('answer-tab').click()" >
+                    <img src="icons/avatar.png" class="rounded-circle shadow-sm mr-3" style="max-width: 50%" alt="avatar-1" />
+                    <div class="media-body" :title="answer.quiz.text">
+                        <h5 class=" mt-0 mb-1 d-inline-block text-truncate" style="max-width: 35vw;">
+                            {{answer.user.username}}. №{{ answer.answer.quizId }} {{ answer.quiz.text }}
+                            нельзя представить.
+                        </h5>
+                        <p>
+                           {{answer.answer.text}}
+                        </p>
+                    </div>
                 </li>
               </ul>
             </div>
@@ -288,25 +267,20 @@
             >
               <ul class="list-unstyled">
                 <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
-                <li class="media p-3 shadow my-3">
-                  <img
-                    src="icons/avatar.png"
-                    class="rounded-circle shadow-sm mr-3"
-                    style="max-width: 50%"
-                    alt="avatar-1"
-                  />
-                  <div class="media-body">
-                    <h5
-                      class=" mt-0 mb-1 d-inline-block text-truncate"
-                      style="max-width: 35vw;"
-                    >
-                      Иванов М. #1. Очень длинный вопрос. Нереально длинный
-                      длиннее нельзя представить.
-                    </h5>
-                    <p>
-                      Это мой комментарий. Я против данного вопроса однозначно.
-                    </p>
-                  </div>
+                <div v-if="activeAnswers.length === 0">
+                    <p class="p-3 shadow">Ещё никто не комментировал данный вопрос. Оставьте первый комментарий</p>
+                </div>
+                <li v-for="answer in activeAnswers" class="media p-3 shadow my-3">
+                    <img src="icons/avatar.png" class="rounded-circle shadow-sm mr-3" style="max-width: 50%" alt="avatar-1" />
+                    <div class="media-body" :title="answer.quiz.text">
+                        <h5 class=" mt-0 mb-1 d-inline-block text-truncate" style="max-width: 35vw;">
+                            {{answer.user.username}}. №{{ answer.answer.quizId }} {{ answer.quiz.text }}
+                            нельзя представить.
+                        </h5>
+                        <p>
+                            {{answer.answer.text}}
+                        </p>
+                    </div>
                 </li>
               </ul>
             </div>
@@ -330,10 +304,10 @@
                       class=" mt-0 mb-1 d-inline-block text-truncate"
                       style="max-width: 35vw;"
                     >
-                      Иванов М.  ivanov@mail.ru
+                      Иванов М. ivanov@mail.ru
                     </h5>
                     <p>
-                      Ответил: 7 из 13 вопросов<br> 
+                      Ответил: 7 из 13 вопросов<br />
                       Комментариев: 15 по 5 вопросам
                     </p>
                   </div>

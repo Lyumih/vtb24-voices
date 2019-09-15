@@ -1,6 +1,7 @@
 const app = new Vue({
   el: "#app",
   data: {
+    selectedQuiz: 0,
     quizzes: [
       {
         id: 0,
@@ -77,6 +78,72 @@ const app = new Vue({
         text:
           "Что такое сорняк? Это растение, достоинства которого еще не раскрыты."
       }
-    ]
+    ],
+    votes: [
+      {
+        id: 0,
+        yes: [0, 1, 2, 3, 4, 5],
+        no: [6, 7, 8, 9, 10],
+        quite: [11, 12, 13, 14, 15]
+      },
+      {
+        id: 1,
+        yes: [0, 1, 2, 3, 4, 5],
+        no: [6, 7, 8, 9, 10],
+        quite: [11, 12, 13, 14, 15]
+      }
+    ],
+    users: [
+      {
+        id: 0,
+        username: "Михаил"
+      },
+      {
+        id: 1,
+        username: "Никита"
+      },
+      {
+        id: 2,
+        username: "Владислав"
+      },
+      {
+        id: 3,
+        username: "Анита"
+      }
+    ],
+    answers: [
+      {
+        userId: 0,
+        quizId: 1,
+        text: "Это мой ответ"
+      },
+      {
+        userId: 2,
+        quizId: 5,
+        text: "А это ещё один мой комментарий"
+      }
+    ],
+    author: {
+      username: "Шикарный К."
+    }
+  },
+  computed: {
+    activeQuiz() {
+      return this.quizzes[this.selectedQuiz];
+    },
+    allAnswers() {
+      return this.answers.map(answer => {
+        return {
+          user: this.users.find(user => user.id === answer.userId),
+          quiz: this.quizzes.find(quiz => quiz.id === answer.quizId),
+          answer
+        };
+      });
+    },
+    activeAnswers() {
+      return this.allAnswers.filter(
+        answer => answer.answer.quizId == this.selectedQuiz
+      );
+    }
   }
 });
