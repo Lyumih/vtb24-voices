@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <title>ВТБ. Голосование</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="app" class="justify-container">
+      <nav class="navbar row sticky-top navbar-dark bg-primary">
+        <a class="navbar-brand ml-5" href="#!">ВТБ. Голосование</a>
+      </nav>
+
+      <!-- STATISTICS -->
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 text-center">
+          Осталось времени<br />13 мин. 52 сек.
+        </div>
+        <div class="col-4">
+          <div>Отвечено: 7 из 15</div>
+          <div class="progress">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              style="width: 15%"
+              aria-valuenow="15"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              1
+            </div>
+            <div
+              class="progress-bar bg-danger"
+              role="progressbar"
+              style="width: 30%"
+              aria-valuenow="30"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              2
+            </div>
+            <div
+              class="progress-bar bg-warning"
+              role="progressbar"
+              style="width: 20%"
+              aria-valuenow="20"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              5
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ AND CHATS -->
+      <div class="row">
+        <!-- QUIZ TAB -->
+        <div class="col-6">
+          <ul
+            class="nav nav-tabs nav-fill mb-3"
+            id="quiz-result-tab"
+            role="tablist"
+          >
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="#quiz"
+                id="quiz-tab"
+                data-toggle="tab"
+                role="tab"
+                aria-controls="quiz"
+                aria-selected="true"
+                >Вопросы</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#result"
+                id="result-tab"
+                data-toggle="tab"
+                role="tab"
+                aria-controls="contact"
+                aria-selected="false"
+                >Результаты голосования</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="quize-result-content">
+            <div
+              class="tab-pane fade show active"
+              role="tabpanel"
+              id="quiz"
+              aria-labelledby="quiz-tab"
+            >
+              <!-- QUIZ 🔥 -->
+              <div id="accordion" role="tablist">
+                <div
+                  class="card mx-2 shadow-sm m-3"
+                  v-for="(quiz, index) in quizzes"
+                >
+                  <div
+                    class="card-header"
+                    :class="index==1?'bg-success':''"
+                    role="tab"
+                    :id="'quiz-heading-'+index"
+                  >
+                    <h5 class="mb-0">
+                      <a
+                        data-toggle="collapse"
+                        :href="'#quiz-'+index"
+                        aria-expanded="true"
+                        :aria-controls="'quiz-'+index"
+                        >#{{ quiz.id }} 🔥 {{ quiz.text }}
+                      </a>
+                    </h5>
+                  </div>
+                  <div
+                    :id="'quiz-'+index"
+                    class="collapse show"
+                    role="tabpanel"
+                    :aria-labelledby="'quiz-heading-'+index"
+                  >
+                    <!-- TODO: Скрываются вопросы если ответил -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-4">
+                          <button class="btn btn-outline-success btn-block">
+                            ЗА
+                          </button>
+                        </div>
+                        <div class="col-4">
+                          <button class="btn btn-outline-danger btn-block">
+                            ПРОТИВ
+                          </button>
+                        </div>
+                        <div class="col-4">
+                          <button class="btn btn-outline-warning btn-block">
+                            ВОЗДЕРЖАЛСЯ
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane"
+              role="tabpanel"
+              id="result"
+              aria-labelledby="result-tab"
+            >
+              Скоро появятся
+            </div>
+          </div>
+        </div>
+        <!-- CHAT TAB -->
+        <div class="col-6">
+          <ul class="nav nav-tabs nav-justified" id="chat-answer-members-tab">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="chat-tab"
+                data-toggle="tab"
+                href="#chat"
+                role="tab"
+                aria-selected="true"
+                >Чат</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link "
+                id="answer-tab"
+                data-toggle="tab"
+                href="#answer"
+                role="tab"
+                aria-selected="false"
+                >Ответы</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link "
+                id="members-tab"
+                data-toggle="tab"
+                href="#members"
+                role="tab"
+                aria-selected="false"
+                >Участники</a
+              >
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col-12 input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">#1</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Введите комментарий на вопроос ..."
+                class="form-control"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-success" type="button">Ответить</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" id="chat-answer-members-content">
+            <div
+              class="tab-pane fade show active"
+              id="chat"
+              role="tabpanel"
+              aria-labelledby="chat-tab"
+            >
+              <ul class="list-unstyled">
+                <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
+                <li class="media p-3 shadow my-3">
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    style="max-width: 50%"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      Иванов М. Очень длинный вопрос. Нереально длинный длиннее
+                      нельзя представить.
+                    </h5>
+                    <p>
+                      Это мой комментарий. Я против данного вопроса однозначно.
+                    </p>
+                  </div>
+                </li>
+                <li class="media p-3 shadow my-3">
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      Иванов М. #1 Очень длинный вопрос. Нереально длинный
+                      длиннее нельзя представить.
+                    </h5>
+                    <p>
+                      Это мой комментарий. Я против данного вопроса однозначно.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="tab-pane"
+              id="answer"
+              role="tabpanel"
+              aria-labelledby="answer-tab"
+            >
+              <ul class="list-unstyled">
+                <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
+                <li class="media p-3 shadow my-3">
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    style="max-width: 50%"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      Иванов М. #1. Очень длинный вопрос. Нереально длинный
+                      длиннее нельзя представить.
+                    </h5>
+                    <p>
+                      Это мой комментарий. Я против данного вопроса однозначно.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="tab-pane"
+              id="members"
+              role="tabpanel"
+              aria-labelledby="members-tab"
+            >
+              <ul class="list-unstyled">
+                <!-- TODO: ЕСЛИ ПРЕДЫДУЩЕЕ ОБСУЖДЕНИЕ ОТНОСИТСЯ К КОНКРЕТНОМУ ВОПРОСУ, ТО НЕ НАДО ДЕЛАТЬ ОТСТУПЫ -->
+                <li class="media p-3 shadow my-3">
+                  <img
+                    src="icons/avatar.png"
+                    class="rounded-circle shadow-sm mr-3"
+                    style="max-width: 50%"
+                    alt="avatar-1"
+                  />
+                  <div class="media-body">
+                    <h5
+                      class=" mt-0 mb-1 d-inline-block text-truncate"
+                      style="max-width: 35vw;"
+                    >
+                      Иванов М.  ivanov@mail.ru
+                    </h5>
+                    <p>
+                      Ответил: 7 из 13 вопросов<br> 
+                      Комментариев: 15 по 5 вопросам
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/vote.js"></script>
+  </body>
+</html>
