@@ -19,7 +19,10 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     <title>ВТБ. Голосование</title>
@@ -28,18 +31,24 @@
   <body>
     <!-- HEADER -->
     <div id="app" class="container-fluid">
-      <nav class="navbar row sticky-top navbar-dark bg-primary">
-        <a class="navbar-brand ml-5" href="#!">ВТБ. Голосование</a>
+      <nav
+        class="navbar row sticky-top navbar-dark "
+        style="background-color: rgb(10, 40, 150)"
+      >
+        <a class="navbar-brand ml-3" href="#!">ВТБ. Голосование</a>
       </nav>
 
       <!-- STATISTICS -->
       <div class="row my-4">
-        <div class="col-4 text-center">
+        <div class="col-4 text-center shadow">
           <h3>Пользователь: {{ myUser.username }}</h3>
+          <h3>Тема: Поиск мудрости</h3>
         </div>
-        <div class="col-4 text-center">Осталось времени<br />13 мин.</div>
-        <div class="col-4">
-          <div>Отвечено: 7 из 15</div>
+        <div class="col-4 h3 text-center shadow-lg">
+          <strong>Осталось времени<br />13 мин.</strong>
+        </div>
+        <div class="col-4 shadow">
+          <div><strong>Отвечено: 8 из 15</strong></div>
           <div class="progress">
             <div
               class="progress-bar bg-success"
@@ -96,10 +105,10 @@
                 >Вопросы</a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" onclick="document.location.href='index.html'">
               <a
                 class="nav-link"
-                href="#result"
+                href="index.html"
                 id="result-tab"
                 data-toggle="tab"
                 role="tab"
@@ -194,8 +203,7 @@
               role="tabpanel"
               id="result"
               aria-labelledby="result-tab"
-            >
-            </div>
+            ></div>
           </div>
         </div>
         <!-- CHAT TAB -->
@@ -249,7 +257,13 @@
                 v-model="commentText"
               />
               <div class="input-group-append">
-                <button class="btn btn-success" type="button" @click="addComment()">Добавить комментарий</button>
+                <button
+                  class="btn btn-success"
+                  type="button"
+                  @click="addComment()"
+                >
+                  Добавить комментарий
+                </button>
               </div>
             </div>
           </div>
