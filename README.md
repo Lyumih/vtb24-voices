@@ -4,7 +4,7 @@
 ![mainpage](mainpage.jpg)
 
 ## Запустить приложение
-Установить Python
+Установить Python <br>
 ```pip install virtualenv .``` <br>
 ```pip install -r requirements.txt``` <br> 
 ```python manage.py makemigrations``` <br>
