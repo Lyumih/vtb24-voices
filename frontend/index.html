@@ -23,20 +23,20 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script defer src="index.js"></script>
 
-    <link href="./index.css" rel="stylesheet" />
+    <link href="./css/index.css" rel="stylesheet" />
 
     <title>VTB</title>
   </head>
   <body>
-    <div id="app" class="container-fluid">
+    <div id="app1" class="container-fluid">
       <nav
         class="navbar sticky-top navbar-dark row"
         style="background-color: #0a2896;"
       >
-        <a class="navbar-brand" href="#!">ВТБ. Голосование</a>
+        <a class="navbar-brand" href="#!">ВТБ Голосование</a>
       </nav>
-      <div class="p-4">
-        <h3><strong>ВТБ. Протокол собрания</strong></h3>
+      <div class="p-2">
+        <h4><strong><img src="icons/logo.png" width='100px' alt="logo" /> Протокол собрания</strong></h4>
         <div><strong>Дата:</strong> {{ date }}</div>
         <div><strong>Тема дня: </strong> {{ topic }}</div>
 
@@ -62,7 +62,7 @@
           <div>
             <ol>
               <li v-for="todo in comment">
-                {{ todo.text }}
+                {{ todo.text }} {{todo.name}}
               </li>
             </ol>
           </div>
