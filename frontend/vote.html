@@ -247,22 +247,35 @@
             <div class="col-12 mt-1 input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" :title="activeQuiz.text"
-                  >№{{ selectedQuiz }}</span
+                  ><div
+                    class="btn-group btn-group-toggle"
+                    data-toggle="buttons"
+                  > 
+                    <label class="btn btn-success btn-sm active">
+                      <input type="checkbox" checked autocomplete="off" />
+                      Аргумент +
+                    </label>
+                    <label class="btn btn-danger btn-sm">
+                      <input type="checkbox" autocomplete="off" /> Аргумент -
+                    </label>
+                  </div>
+                  <!-- №{{ selectedQuiz }} --> </span
                 >
               </div>
               <input
                 type="text"
                 :placeholder="'Введите комментарий на вопроос №'+selectedQuiz"
-                class="form-control"
+                class="form-control input-lg p-4"
                 v-model="commentText"
               />
               <div class="input-group-append">
                 <button
-                  class="btn btn-success"
+                  class="btn btn-success btn-sm"
                   type="button"
                   @click="addComment()"
                 >
-                  Добавить комментарий
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+
                 </button>
               </div>
             </div>
