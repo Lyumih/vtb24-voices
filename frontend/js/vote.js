@@ -6,6 +6,7 @@ const app = new Vue({
       id: 1,
       username: "Никита"
     },
+    commentText: "",
     quizzes: [
       {
         id: 0,
@@ -213,6 +214,14 @@ const app = new Vue({
       }
 
       console.log(vote);
+    },
+    addComment() {
+      this.answers.push({
+        userId: this.myUser.id,
+        quizId: this.selectedQuiz,
+        text: this.commentText
+      });
+      this.commentText = "";
     }
   }
 });

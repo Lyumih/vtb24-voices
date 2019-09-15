@@ -195,7 +195,6 @@
               id="result"
               aria-labelledby="result-tab"
             >
-              Скоро появятся
             </div>
           </div>
         </div>
@@ -247,9 +246,10 @@
                 type="text"
                 :placeholder="'Введите комментарий на вопроос №'+selectedQuiz"
                 class="form-control"
+                v-model="commentText"
               />
               <div class="input-group-append">
-                <button class="btn btn-success" type="button">Ответить</button>
+                <button class="btn btn-success" type="button" @click="addComment()">Добавить комментарий</button>
               </div>
             </div>
           </div>
