@@ -1,4 +1,40 @@
-.navbar-brand{
-    
+.p-4 > div{
+margin: 10px;
+}
 
+.form{
+    display: flex;
+}
+
+body{
+    font-family: 'Lato', sans-serif;
+}
+
+.container {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  margin: 0px 0px 0px 60px;
+}
+
+.sector {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform-origin: left bottom;
+}
+
+.container:after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: #fff;
+  border-radius: 50%;
+  top: 25%;
+  left: 25%;
 }
